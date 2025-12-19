@@ -1,0 +1,49 @@
+<!-- dashboard/index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Geoespacial</title>
+    
+    <!-- Estilos herdados do portfólio -->
+    <link rel="stylesheet" href="../assets/css/theme.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    
+    <!-- Estilos específicos do dashboard -->
+    <style>
+        /* Estilos específicos do dashboard */
+        .dashboard-container {
+            /* Usa as variáveis do theme.css */
+            background: var(--gradient-dark);
+        }
+        
+        /* Sobrescreve se necessário */
+        .dashboard-sidebar {
+            background: rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="dashboard">
+    <!-- Conteúdo do dashboard -->
+    
+    <!-- Scripts -->
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/data-integration.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="components/filters.js"></script>
+    <script src="components/charts.js"></script>
+    
+    <script>
+        // Inicializar com seus dados reais
+        const dataManager = new DataIntegrationManager(CONFIG);
+        
+        dataManager.loadAllData().then(data => {
+            const dashboard = new GeoDashboard(data);
+            dashboard.init();
+        });
+    </script>
+</body>
+</html>
+
