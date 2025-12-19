@@ -1,49 +1,326 @@
-<!-- dashboard/index.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Geoespacial</title>
+    <title>Dashboard Geoespacial | Festivais Mundiais</title>
     
-    <!-- Estilos herdados do portfólio -->
+    <!-- Tema Principal -->
     <link rel="stylesheet" href="../assets/css/theme.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="../assets/css/animations.css">
     
-    <!-- Estilos específicos do dashboard -->
-    <style>
-        /* Estilos específicos do dashboard */
-        .dashboard-container {
-            /* Usa as variáveis do theme.css */
-            background: var(--gradient-dark);
-        }
-        
-        /* Sobrescreve se necessário */
-        .dashboard-sidebar {
-            background: rgba(0,0,0,0.2);
-        }
-    </style>
+    <!-- CSS do Dashboard -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="dashboard">
-    <!-- Conteúdo do dashboard -->
-    
+<body class="geo-dashboard">
+    <!-- Header -->
+    <header class="geo-header">
+        <div class="nav-container">
+            <a href="../index.html" class="geo-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <span class="logo-text">GeoDashboard</span>
+            </a>
+            
+            <nav class="geo-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="../projetos/festivais-mundiais/index.html" class="nav-link">
+                    <i class="fas fa-map-marked-alt"></i> Projetos
+                </a>
+                <a href="../index.html#contact" class="nav-link">
+                    <i class="fas fa-envelope"></i> Contato
+                </a>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="geo-btn geo-btn-outline btn-sm">
+                    <i class="fas fa-download"></i> Exportar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Container -->
+    <main class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-filter"></i> Filtros</h2>
+                <button class="btn-clear" id="clearFilters">
+                    <i class="fas fa-redo"></i> Limpar
+                </button>
+            </div>
+            
+            <!-- Filtro por Continente -->
+            <div class="filter-section">
+                <h3><i class="fas fa-globe-americas"></i> Continente</h3>
+                <div class="filter-options" id="continentFilter">
+                    <label class="filter-option active">
+                        <input type="checkbox" checked data-continent="all">
+                        <span class="checkmark"></span>
+                        Todos os Continentes
+                    </label>
+                    <!-- Opções serão preenchidas por JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Filtro por Tamanho -->
+            <div class="filter-section">
+                <h3><i class="fas fa-chart-bar"></i> Tamanho do Festival</h3>
+                <div class="filter-options" id="sizeFilter">
+                    <label class="filter-option active">
+                        <input type="checkbox" checked data-size="all">
+                        <span class="checkmark"></span>
+                        Todos os Tamanhos
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" data-size="grande">
+                        <span class="checkmark"></span>
+                        Grande (20k+)
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" data-size="medio">
+                        <span class="checkmark"></span>
+                        Médio (5k-20k)
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" data-size="pequeno">
+                        <span class="checkmark"></span>
+                        Pequeno (<5k)
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Estatísticas em Tempo Real -->
+            <div class="stats-preview">
+                <h3><i class="fas fa-chart-line"></i> Estatísticas</h3>
+                <div class="stats-grid">
+                    <div class="stat-card mini">
+                        <div class="stat-value" id="totalFestivals">0</div>
+                        <div class="stat-label">Festivais</div>
+                    </div>
+                    <div class="stat-card mini">
+                        <div class="stat-value" id="totalContinents">0</div>
+                        <div class="stat-label">Continentes</div>
+                    </div>
+                    <div class="stat-card mini">
+                        <div class="stat-value" id="avgAttendance">0</div>
+                        <div class="stat-label">Média Público</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Legenda do Mapa -->
+            <div class="map-legend">
+                <h3><i class="fas fa-palette"></i> Legenda</h3>
+                <div class="legend-items" id="legendContainer">
+                    <!-- Preenchido por JavaScript -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <section class="dashboard-main">
+            <!-- Painel de Controle -->
+            <div class="control-panel">
+                <div class="control-title">
+                    <h1><i class="fas fa-music"></i> Festivais Mundiais</h1>
+                    <p class="subtitle">Análise geoespacial de festivais de música eletrônica</p>
+                </div>
+                
+                <div class="control-actions">
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="map">
+                            <i class="fas fa-map"></i> Mapa
+                        </button>
+                        <button class="view-btn" data-view="charts">
+                            <i class="fas fa-chart-pie"></i> Gráficos
+                        </button>
+                        <button class="view-btn" data-view="table">
+                            <i class="fas fa-table"></i> Tabela
+                        </button>
+                    </div>
+                    
+                    <div class="export-options">
+                        <button class="geo-btn geo-btn-outline btn-sm">
+                            <i class="fas fa-file-export"></i> Exportar Dados
+                        </button>
+                        <button class="geo-btn geo-btn-primary btn-sm" id="refreshData">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mapa Interativo -->
+            <div class="map-container view-content active" id="mapView">
+                <div class="map-header">
+                    <h2><i class="fas fa-map-marked-alt"></i> Mapa Global</h2>
+                    <div class="map-tools">
+                        <button class="tool-btn" id="zoomIn">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="tool-btn" id="zoomOut">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="tool-btn" id="fitBounds">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button class="tool-btn" id="toggleFullscreen">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="map"></div>
+            </div>
+            
+            <!-- Painel de Gráficos -->
+            <div class="charts-container view-content" id="chartsView">
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-pie"></i> Distribuição por Continente</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="continentChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-bar"></i> Público por País</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="countryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-line"></i> Evolução por Tamanho</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-globe-americas"></i> Mapa de Calor</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="heatmapChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabela de Dados -->
+            <div class="table-container view-content" id="tableView">
+                <div class="table-header">
+                    <h2><i class="fas fa-table"></i> Dados dos Festivais</h2>
+                    <div class="table-actions">
+                        <input type="text" class="search-input" placeholder="Buscar festival..." id="tableSearch">
+                        <button class="geo-btn geo-btn-outline btn-sm" id="exportTable">
+                            <i class="fas fa-download"></i> CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="festivalsTable">
+                        <thead>
+                            <tr>
+                                <th>Festival</th>
+                                <th>País</th>
+                                <th>Continente</th>
+                                <th>Público</th>
+                                <th>Categoria</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Preenchido por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Painel de Insights -->
+            <div class="insights-panel">
+                <h2><i class="fas fa-lightbulb"></i> Insights</h2>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <div class="insight-icon" style="background: var(--cartografia);">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Maior Concentração</h4>
+                            <p id="topContinent">Carregando...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon" style="background: var(--sensoriamento);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Festival Maior</h4>
+                            <p id="largestFestival">Carregando...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon" style="background: var(--webgis);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Tendência</h4>
+                            <p id="trendInsight">Carregando...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon" style="background: var(--analise);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Destaque</h4>
+                            <p id="highlightInsight">Carregando...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <!-- Scripts -->
-    <script src="../assets/js/config.js"></script>
-    <script src="../assets/js/data-integration.js"></script>
-    <script src="dashboard.js"></script>
-    <script src="components/filters.js"></script>
-    <script src="components/charts.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/filters.js"></script>
     
+    <!-- Inicialização -->
     <script>
-        // Inicializar com seus dados reais
-        const dataManager = new DataIntegrationManager(CONFIG);
-        
-        dataManager.loadAllData().then(data => {
-            const dashboard = new GeoDashboard(data);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar dashboard
+            const dashboard = new GeoDashboard({
+                dataUrl: 'data/festivais_mundiais.geojson',
+                mapContainer: 'map',
+                enableClustering: true,
+                enableHeatmap: false
+            });
+            
             dashboard.init();
         });
     </script>
 </body>
 </html>
-
