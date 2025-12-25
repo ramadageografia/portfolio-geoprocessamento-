@@ -1,262 +1,331 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio de Geoprocessamento | Cartografia, Sensoriamento e WebGIS</title>
-    
-    <!-- Fontes -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Leaflet (para mapas no dashboard) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- Seus estilos -->
-  <link rel="stylesheet" href="assets/css/style.css">
+    <title>Portfólio | Especialista em Geoprocessamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carregamento da biblioteca Lucide com defer para não bloquear o render -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .hero-pattern {
+            background-color: #0f172a;
+            background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+        }
+
+        .map-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), 
+                        url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-shadow {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="geo-header">
-        <div class="nav-container">
-            <a href="#" class="geo-logo">
-                <div class="logo-icon">
-                    <i class="fas fa-globe-americas"></i>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- Navegação -->
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <i data-lucide="map-pin" class="text-blue-600 mr-2"></i>
+                    <span class="font-bold text-xl tracking-tight">GeoPortfolio</span>
                 </div>
-                <span class="logo-text">GeoPortfólio</span>
-            </a>
-            
-            <nav class="geo-nav">
-                <a href="#home" class="nav-link active">
-                    <i class="fas fa-home"></i> Início
-                </a>
-                <a href="#about" class="nav-link">
-                    <i class="fas fa-user"></i> Sobre
-                </a>
-                <a href="#projects" class="nav-link">
-                    <i class="fas fa-project-diagram"></i> Projetos
-                </a>
-                <a href="#contact" class="nav-link">
-                    <i class="fas fa-envelope"></i> Contato
-                </a>
-            </nav>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#inicio" class="text-slate-600 hover:text-blue-600 font-medium">Início</a>
+                    <a href="#habilidades" class="text-slate-600 hover:text-blue-600 font-medium">Habilidades</a>
+                    <a href="#projetos" class="text-slate-600 hover:text-blue-600 font-medium">Projetos</a>
+                    <a href="#contato" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Contato</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-slate-600">
+                        <i data-lucide="menu"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-    </header>
+        <!-- Mobile Menu dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-4">
+            <a href="#inicio" class="block text-slate-600">Início</a>
+            <a href="#habilidades" class="block text-slate-600">Habilidades</a>
+            <a href="#projetos" class="block text-slate-600">Projetos</a>
+            <a href="#contato" class="block text-blue-600 font-bold">Contato</a>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="geo-hero" id="home">
-        <div class="hero-bg"></div>
-        <div class="floating-particles"></div>
-        
-        <div class="container">
-            <div class="hero-content fade-in-up">
-                <h1>Geoprocessamento & Análise Espacial</h1>
-                <p class="hero-subtitle">Cartografia Digital • Sensoriamento Remoto • Web GIS</p>
-                <p class="hero-description">
-                    Transformando dados espaciais em insights valiosos através de tecnologias 
-                    geoespaciais avançadas. Desenvolvimento de soluções personalizadas para 
-                    análise territorial, mapeamento temático e visualização interativa.
-                </p>
-                
-                <div class="hero-buttons">
-                    <a href="#projects" class="geo-btn geo-btn-primary delay-1">
-                        <i class="fas fa-map-marked-alt"></i> Ver Projetos
-                    </a>
-                    <a href="#contact" class="geo-btn geo-btn-secondary delay-2">
-                        <i class="fas fa-paper-plane"></i> Contato
-                    </a>
-                    <a href="dashboard/index.html" class="geo-btn geo-btn-outline delay-3">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
+    <section id="inicio" class="pt-32 pb-20 px-4 map-bg text-white">
+        <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+            <div class="w-32 h-32 rounded-full border-4 border-blue-500 overflow-hidden mb-6">
+                <img src="https://ui-avatars.com/api/?name=Seu+Nome&background=0D8ABC&color=fff&size=128" alt="Foto de Perfil">
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Transformando Dados em Inteligência Geográfica</h1>
+            <p class="text-xl text-slate-300 max-w-2xl mb-8">Especialista em SIG, Sensoriamento Remoto e Análise de Dados Espaciais para tomada de decisão estratégica.</p>
+            <div class="flex space-x-4">
+                <a href="#projetos" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition flex items-center">
+                    Ver Projetos <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                </a>
+                <a href="#contato" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/30 px-8 py-3 rounded-full font-semibold transition">
+                    Baixar CV
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Habilidades -->
+    <section id="habilidades" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900">Especialidades Técnicas</h2>
+                <div class="w-16 h-1 bg-blue-600 mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Skill 1 -->
+                <div class="p-8 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="layers"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Sistemas de Informação Geográfica (SIG)</h3>
+                    <p class="text-slate-600">Domínio avançado de QGIS e ArcGIS Pro para análise vetorial e matricial complexa.</p>
+                </div>
+                <!-- Skill 2 -->
+                <div class="p-8 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="satellite"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Sensoriamento Remoto</h3>
+                    <p class="text-slate-600">Processamento de imagens orbitais (Landsat, Sentinel) e dados de drones (RGB/Multiespectral).</p>
+                </div>
+                <!-- Skill 3 -->
+                <div class="p-8 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="database"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Banco de Dados Espaciais</h3>
+                    <p class="text-slate-600">Modelagem e gestão de dados com PostgreSQL/PostGIS e automação com Python (ArcPy/PyQGIS).</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Seção de Dados Online (a que você já tinha) -->
-    <section class="data-sources-section" id="sources">
-        <div class="container fade-in-up">
-            <h2><i class="fas fa-link"></i> Meus Dados Online</h2>
-            <div class="sources-grid">
-                <!-- Google Colab -->
-                <div class="source-card fade-in-up delay-1">
-                    <div class="source-icon" style="background: #F9AB00;">
-                        <i class="fab fa-google"></i>
+    <!-- Projetos -->
+    <section id="projetos" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900">Projetos em Destaque</h2>
+                    <p class="text-slate-600 mt-2">Uma seleção dos meus trabalhos mais recentes.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Projeto 1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm card-shadow">
+                    <div class="h-48 bg-slate-200 flex items-center justify-center relative">
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800" alt="Análise Ambiental" class="w-full h-full object-cover">
+                        <span class="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">MEIO AMBIENTE</span>
                     </div>
-                    <h3>Google Colab</h3>
-                    <p>Notebooks de análise geoespacial</p>
-                    <a href="https://colab.research.google.com/drive/1pKJIoHXHiKybXH3pjODGg6IkornrvJua" 
-                       target="_blank" class="geo-btn geo-btn-outline">
-                        <i class="fas fa-external-link-alt"></i> Abrir Colab
-                    </a>
-                    <div class="source-stats">
-                        <span><i class="fas fa-code"></i> Análises Python</span>
-                        <span><i class="fas fa-chart-line"></i> Visualizações</span>
+                    <div class="p-6">
+                        <h4 class="font-bold text-xl mb-2">Monitoramento de Desmatamento</h4>
+                        <p class="text-slate-600 text-sm mb-4">Análise temporal utilizando imagens Sentinel-2 para identificação de focos de desmatamento ilegal em áreas de preservação.</p>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded border border-slate-200">QGIS</span>
+                            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded border border-slate-200">Google Earth Engine</span>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Google My Maps -->
-                <div class="source-card fade-in-up delay-2">
-                    <div class="source-icon" style="background: #34A853;">
-                        <i class="fas fa-map-marked-alt"></i>
+
+                <!-- Projeto 2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm card-shadow">
+                    <div class="h-48 bg-slate-200 flex items-center justify-center relative">
+                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80&w=800" alt="Planejamento Urbano" class="w-full h-full object-cover">
+                        <span class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">URBANO</span>
                     </div>
-                    <h3>Google My Maps</h3>
-                    <p>Mapas interativos e camadas</p>
-                    <a href="https://www.google.com/maps/d/u/0/edit?hl=pt-BR&mid=1adej1ZKSiAOyUe4Uu9jPBV6P6DalfQk" 
-                       target="_blank" class="geo-btn geo-btn-outline">
-                        <i class="fas fa-external-link-alt"></i> Ver Mapa
-                    </a>
-                    <div class="source-stats">
-                        <span><i class="fas fa-layer-group"></i> 3+ Camadas</span>
-                        <span><i class="fas fa-map-pin"></i> 50+ Marcadores</span>
+                    <div class="p-6">
+                        <h4 class="font-bold text-xl mb-2">Plano Diretor Digital</h4>
+                        <p class="text-slate-600 text-sm mb-4">Estruturação de WebGIS para gestão cadastral urbana, integrando infraestrutura e demografia para planejamento municipal.</p>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded border border-slate-200">ArcGIS Online</span>
+                            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded border border-slate-200">PostGIS</span>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Dashboard Integrado -->
-                <div class="source-card fade-in-up delay-3">
-                    <div class="source-icon" style="background: #2E7D32;">
-                        <i class="fas fa-tachometer-alt"></i>
+
+                <!-- Projeto 3 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm card-shadow">
+                    <div class="h-48 bg-slate-200 flex items-center justify-center relative">
+                        <img src="https://images.unsplash.com/photo-1594498653385-d5172b532c00?auto=format&fit=crop&q=80&w=800" alt="Agricultura de Precisão" class="w-full h-full object-cover">
+                        <span class="absolute top-4 right-4 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded">AGRO</span>
                     </div>
-                    <h3>Dashboard Integrado</h3>
-                    <p>Visualize todos os dados juntos</p>
-                    <a href="dashboard/index.html" class="geo-btn geo-btn-primary">
-                        <i class="fas fa-rocket"></i> Acessar Dashboard
-                    </a>
-                    <div class="source-stats">
-                        <span><i class="fas fa-sync-alt"></i> Atualização em tempo real</span>
-                        <span><i class="fas fa-filter"></i> Filtros avançados</span>
+                    <div class="p-6">
+                        <h4 class="font-bold text-xl mb-2">Vigor Vegetativo (NDVI)</h4>
+                        <p class="text-slate-600 text-sm mb-4">Criação de mapas de aplicação em taxa variável baseados em índices de vegetação derivados de voos com drones multiespectrais.</p>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded border border-slate-200">Pix4D</span>
+                            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded border border-slate-200">Python</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Sobre Mim -->
-    <section class="section about" id="about">
-        <div class="container">
-            <div class="about-content fade-in-up">
-                <div class="about-text">
-                    <h2>Sobre Mim</h2>
-                    <p>
-                        Profissional especializado em Geoprocessamento com experiência em análise espacial, 
-                        desenvolvimento de sistemas de informação geográfica e processamento de imagens de 
-                        sensoriamento remoto.
-                    </p>
-                    
-                    <div class="skills-grid">
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-map"></i>
-                            </div>
-                            <div class="skill-info">
-                                <h4>Cartografia Digital</h4>
-                                <p>QGIS, ArcGIS, gvSIG</p>
-                            </div>
-                        </div>
-                        
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-satellite"></i>
-                            </div>
-                            <div class="skill-info">
-                                <h4>Sensoriamento Remoto</h4>
-                                <p>Landsat, Sentinel, Google Earth Engine</p>
-                            </div>
-                        </div>
-                        
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <div class="skill-info">
-                                <h4>Desenvolvimento WebGIS</h4>
-                                <p>Leaflet.js, Mapbox, PostGIS</p>
-                            </div>
-                        </div>
+    <!-- Seção de Contato -->
+    <section id="contato" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8">Vamos conversar sobre seu próximo mapa?</h2>
+            <p class="text-slate-600 mb-12">Estou disponível para projetos freelance, consultoria ou oportunidades de tempo integral.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-12">
+                <div class="flex items-start space-x-4 p-6 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-blue-600"><i data-lucide="mail"></i></div>
+                    <div>
+                        <p class="font-bold">E-mail</p>
+                        <p class="text-slate-600">seu.email@exemplo.com</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-6 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-blue-600"><i data-lucide="linkedin"></i></div>
+                    <div>
+                        <p class="font-bold">LinkedIn</p>
+                        <p class="text-slate-600">linkedin.com/in/seuusuario</p>
                     </div>
                 </div>
             </div>
+
+            <div id="status-message" class="hidden mb-4 p-4 rounded-lg text-white"></div>
+
+            <form id="contact-form" class="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 text-left">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Nome</label>
+                        <input type="text" id="form-name" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Seu Nome" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">E-mail</label>
+                        <input type="email" id="form-email" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="contato@exemplo.com" required>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold mb-2">Mensagem</label>
+                    <textarea id="form-message" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 h-32" placeholder="Como posso ajudar no seu projeto?" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">
+                    Enviar Mensagem
+                </button>
+            </form>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="geo-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>GeoPortfólio</h3>
-                    <p class="footer-description">
-                        Especialista em Geoprocessamento, transformando dados espaciais em soluções inteligentes.
-                    </p>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Links Rápidos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Início</a></li>
-                        <li><a href="#about"><i class="fas fa-chevron-right"></i> Sobre</a></li>
-                        <li><a href="#sources"><i class="fas fa-chevron-right"></i> Dados Online</a></li>
-                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contato</a></li>
-                    </ul>
-                </div>
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex justify-center items-center mb-6">
+                <i data-lucide="map-pin" class="text-blue-500 mr-2"></i>
+                <span class="text-white font-bold text-lg">GeoPortfolio</span>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 GeoPortfólio. Todos os direitos reservados.</p>
-            </div>
+            <p>© 2025 - Desenvolvido por [Seu Nome]. Todos os direitos reservados.</p>
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="assets/js/main.js"></script>
-    
     <script>
-        // Animações básicas
-        document.addEventListener('DOMContentLoaded', function() {
-            // Header scroll effect
-            window.addEventListener('scroll', function() {
-                const header = document.querySelector('.geo-header');
-                if (window.scrollY > 100) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            });
+        // Função para inicializar o Lucide com segurança
+        function initIcons() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            } else {
+                console.error('Lucide library not loaded');
+                // Tenta carregar novamente em 500ms caso falhe
+                setTimeout(initIcons, 500);
+            }
+        }
 
-            // Smooth scroll para links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
+        // Executar após o carregamento do DOM
+        window.addEventListener('DOMContentLoaded', () => {
+            initIcons();
+
+            // Menu Mobile Toggle
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                const navLinks = mobileMenu.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // Simulação de envio de formulário
+            const contactForm = document.getElementById('contact-form');
+            const statusMessage = document.getElementById('status-message');
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
                     e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
                     
+                    const submitBtn = contactForm.querySelector('button');
+                    submitBtn.innerText = 'Enviando...';
+                    submitBtn.disabled = true;
+
+                    setTimeout(() => {
+                        if (statusMessage) {
+                            statusMessage.innerText = 'Mensagem enviada com sucesso! Entrarei em contato em breve.';
+                            statusMessage.className = 'mb-4 p-4 rounded-lg bg-green-500 text-white';
+                            statusMessage.classList.remove('hidden');
+                        }
+                        
+                        contactForm.reset();
+                        submitBtn.innerText = 'Enviar Mensagem';
+                        submitBtn.disabled = false;
+
+                        setTimeout(() => {
+                            if (statusMessage) statusMessage.classList.add('hidden');
+                        }, 5000);
+                    }, 1500);
+                });
+            }
+
+            // Smooth Scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
+                        e.preventDefault();
+                        targetElement.scrollIntoView({
                             behavior: 'smooth'
                         });
                     }
                 });
             });
-
-            // Criar partículas flutuantes
-            const particlesContainer = document.querySelector('.floating-particles');
-            for (let i = 0; i < 15; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.width = `${Math.random() * 3 + 1}px`;
-                particle.style.height = particle.style.width;
-                particle.style.animationDelay = `${Math.random() * 20}s`;
-                particlesContainer.appendChild(particle);
-            }
         });
     </script>
 </body>
 </html>
-
-
