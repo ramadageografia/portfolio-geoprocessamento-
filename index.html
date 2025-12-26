@@ -4,9 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfólio | Especialista em Geoprocessamento</title>
-    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>
+    <!-- Carregamento da biblioteca Lucide com defer para não bloquear o render -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .hero-pattern {
+            background-color: #0f172a;
+            background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+        }
+
+        .map-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), 
+                        url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-shadow {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
 
@@ -191,16 +220,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label class="block text-sm font-semibold mb-2">Nome</label>
-                        <input type="text" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Seu Nome" required>
+                        <input type="text" id="form-name" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Seu Nome" required>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">E-mail</label>
-                        <input type="email" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="contato@exemplo.com" required>
+                        <input type="email" id="form-email" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="contato@exemplo.com" required>
                     </div>
                 </div>
                 <div class="mb-6">
                     <label class="block text-sm font-semibold mb-2">Mensagem</label>
-                    <textarea class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 h-32" placeholder="Como posso ajudar no seu projeto?" required></textarea>
+                    <textarea id="form-message" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 h-32" placeholder="Como posso ajudar no seu projeto?" required></textarea>
                 </div>
                 <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">
                     Enviar Mensagem
@@ -220,6 +249,83 @@
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script>
+        // Função para inicializar o Lucide com segurança
+        function initIcons() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            } else {
+                console.error('Lucide library not loaded');
+                // Tenta carregar novamente em 500ms caso falhe
+                setTimeout(initIcons, 500);
+            }
+        }
+
+        // Executar após o carregamento do DOM
+        window.addEventListener('DOMContentLoaded', () => {
+            initIcons();
+
+            // Menu Mobile Toggle
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                const navLinks = mobileMenu.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // Simulação de envio de formulário
+            const contactForm = document.getElementById('contact-form');
+            const statusMessage = document.getElementById('status-message');
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const submitBtn = contactForm.querySelector('button');
+                    submitBtn.innerText = 'Enviando...';
+                    submitBtn.disabled = true;
+
+                    setTimeout(() => {
+                        if (statusMessage) {
+                            statusMessage.innerText = 'Mensagem enviada com sucesso! Entrarei em contato em breve.';
+                            statusMessage.className = 'mb-4 p-4 rounded-lg bg-green-500 text-white';
+                            statusMessage.classList.remove('hidden');
+                        }
+                        
+                        contactForm.reset();
+                        submitBtn.innerText = 'Enviar Mensagem';
+                        submitBtn.disabled = false;
+
+                        setTimeout(() => {
+                            if (statusMessage) statusMessage.classList.add('hidden');
+                        }, 5000);
+                    }, 1500);
+                });
+            }
+
+            // Smooth Scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
